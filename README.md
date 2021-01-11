@@ -1,5 +1,9 @@
-Renty is for people who seeks furnished rentals!
+# Renty:-
+
+#### **Renty is for people who seeks furnished rentals!**
+
 This is a grad project from ITI-3month MEA/RN program
+
 Participants:
 
 - Motasem
