@@ -45,6 +45,44 @@ app.post('/create', (req, res) => {
         })
 })
 
+app.get('/', (req, res) => {
+    Post.find()
+        .then(foundedPosts => res.json({
+            Data: foundedPosts,
+            Message: "That's all posts in DB"
+
+        }))
+})
+
+app.put('/:id', (req, res) => {
+    const id = req.params.id;
+
+    Post.findByIdAndUpdate(id, req.body, { new: true })
+        .then(updatedPost => {
+            res.json({
+                Message: "Post have been updated",
+                Data: updatedPost
+            })
+        })
+})
+
+app.delete('/:id', (req, res) => {
+    const id = req.params.id;
+
+    Post.findByIdAndDelete(id)
+        .then(deletedPost => {
+            if (!deletedPost) {
+                return res.json({
+                    Message: "Not Found!",
+                    Date: null
+                })
+            }
+            res.json({
+                Message: "Deleted!",
+                Data: deletedPost
+            })
+        })
+})
 
 
 mongoose.connect(mongoDB,{ useNewUrlParser: true , useUnifiedTopology: true})
