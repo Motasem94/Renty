@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const PostSchema = mongoose.Schema({
+const UserSchema = mongoose.Schema({
     profilePic:  {
         type: String
     },
@@ -39,3 +39,5 @@ const PostSchema = mongoose.Schema({
         type: String
     }
 })
+
+module.exports = mongoose.model('User', UserSchema);
