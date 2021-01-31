@@ -38,7 +38,26 @@ exports.RegisterUser = async (req, res) => {
     });
 };
 
-exports.LoginUser = (req, res) => {};
+exports.LoginUser = async (req, res) => {
+  const { error } = loginValidation(req.body);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    res.status(400).json({ error: "Wrong User" });
+  }
+  const validatePassword = await bcrypt.compare(
+    req.body.password,
+    user.password
+  );
+  if (!validatePassword) {
+    res.status(400).json({ error: "Wrong Password" });
+  }
+
+
+  // res.redirect('/home');
+};
 
 exports.GetUser = (req, res) => {};
 
