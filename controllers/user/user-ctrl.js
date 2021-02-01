@@ -98,7 +98,7 @@ exports.UpdateUser = async (req, res) => {
     });
     res.status(200).json({
       Message: "User updated successfully",
-      Data: user
+      Data: user,
     });
   } catch (error) {
     console.log(error);
@@ -106,9 +106,17 @@ exports.UpdateUser = async (req, res) => {
 };
 
 exports.DeleteUser = (req, res) => {
-  try {
-    
-  } catch (error) {
-    console.log(error);
-  }
+  const id = req.params.id;
+  User.findByIdAndDelete(id).then((deletedUser) => {
+    if (!deletedUser) {
+      return res.json({
+        Message: "Not Found!",
+        Date: null,
+      });
+    }
+    res.json({
+      Message: "Deleted!",
+      Data: deletedUser,
+    });
+  });
 };
