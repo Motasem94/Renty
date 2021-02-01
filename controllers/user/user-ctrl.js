@@ -10,12 +10,11 @@ exports.RegisterUser = async (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-  const isEmailExist = await User.findOne({ email: req.body.email });
-  if (isEmailExist) {
+  const emailExist = await User.findOne({ email: req.body.email });
+  if (emailExist) {
     return res.status(400).json({ error: "Email already used" });
   }
-  const salt = await bcrypt.genSalt(10);
-  const password = await bcrypt.hash(req.body.password, salt);
+  const password = await bcrypt.hash(req.body.password, 12);
 
   /* Adding the user to database */
 
@@ -36,6 +35,7 @@ exports.RegisterUser = async (req, res) => {
     .catch((err) => {
       console.log(err);
     });
+  /* Redirect to Login Page */
 };
 
 exports.LoginUser = async (req, res) => {
@@ -45,18 +45,24 @@ exports.LoginUser = async (req, res) => {
   }
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    res.status(400).json({ error: "Wrong User" });
+    return res.status(400).json({ error: "Wrong User" });
   }
   const validatePassword = await bcrypt.compare(
     req.body.password,
     user.password
   );
   if (!validatePassword) {
-    res.status(400).json({ error: "Wrong Password" });
+    return res.status(400).json({ error: "Wrong Password" });
   }
 
+  /* JWT Generate */
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+  res.header("auth-token",token).json({
+    Data: token,
+    Message: "user login token"
+  })
 
-  // res.redirect('/home');
+  /* Redirect to Home Page */
 };
 
 exports.GetUser = (req, res) => {};

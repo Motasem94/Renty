@@ -8,13 +8,14 @@ const userRouter = require('./routers/user/userRouter');
 
 /**********************************/
 
-app.set('view-engine','ejs')
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 db.on('error',console.error.bind(console,"MongoDB error: "));
 
 app.use('/',userRouter);
+
+
 
 
 
