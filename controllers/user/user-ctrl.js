@@ -66,14 +66,29 @@ exports.LoginUser = async (req, res) => {
 };
 
 exports.GetAllUsers = async (req, res) => {
-  const users = await User.find();
-  res.status(200).json({
-    Message: "Fetched Users successfully",
-    users,
-  });
+  try {
+    const users = await User.find();
+    res.status(200).json({
+      Message: "Fetched Users successfully",
+      users,
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-exports.GetUser = (req, res) => {};
+exports.GetUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await User.findById(id);
+    res.status(200).json({
+      Message: "Fetched the User successfully",
+      Data: user,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 exports.UpdateUser = (req, res) => {};
 
