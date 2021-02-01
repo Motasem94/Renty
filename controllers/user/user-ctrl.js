@@ -72,8 +72,8 @@ exports.GetAllUsers = async (req, res) => {
       Message: "Fetched Users successfully",
       users,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -85,11 +85,30 @@ exports.GetUser = async (req, res) => {
       Message: "Fetched the User successfully",
       Data: user,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
   }
 };
 
-exports.UpdateUser = (req, res) => {};
+exports.UpdateUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await User.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    res.status(200).json({
+      Message: "User updated successfully",
+      Data: user
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-exports.DeleteUser = (req, res) => {};
+exports.DeleteUser = (req, res) => {
+  try {
+    
+  } catch (error) {
+    console.log(error);
+  }
+};
