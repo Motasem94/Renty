@@ -28,8 +28,8 @@ exports.RegisterUser = async (req, res) => {
     .save()
     .then((response) => {
       res.json({
-        Data: response,
         Message: "User registered successfully",
+        Data: response
       });
     })
     .catch((err) => {
@@ -57,17 +57,23 @@ exports.LoginUser = async (req, res) => {
 
   /* JWT Generate */
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-  res.header("auth-token",token).json({
-    Data: token,
-    Message: "user login token"
-  })
+  res.header("auth-token", token).json({
+    Message: "user login token",
+    Data: token
+  });
 
   /* Redirect to Home Page */
 };
 
-exports.GetUser = (req, res) => {};
+exports.GetAllUsers = async (req, res) => {
+  const users = await User.find();
+  res.status(200).json({
+    Message: "Fetched Users successfully",
+    users,
+  });
+};
 
-exports.GetAllUsers = (req, res) => {};
+exports.GetUser = (req, res) => {};
 
 exports.UpdateUser = (req, res) => {};
 
