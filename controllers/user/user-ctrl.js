@@ -29,7 +29,7 @@ exports.RegisterUser = async (req, res) => {
     .then((response) => {
       res.json({
         Message: "User registered successfully",
-        Data: response
+        Data: response,
       });
     })
     .catch((err) => {
@@ -59,7 +59,7 @@ exports.LoginUser = async (req, res) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
   res.header("auth-token", token).json({
     Message: "user login token",
-    Data: token
+    Data: token,
   });
 
   /* Redirect to Home Page */
