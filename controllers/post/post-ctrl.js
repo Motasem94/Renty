@@ -59,13 +59,13 @@ exports.GetPost = async (req, res) => {
 exports.UpdatePost = async (req, res) => {
   try {
     const id = req.params.id;
-    const post = await Post.findByIdAndUpdate(id,req.body,{
-      new: true
+    const post = await Post.findByIdAndUpdate(id, req.body, {
+      new: true,
     });
     res.status(200).json({
       Message: "Post updated successfully",
       post,
-    })
+    });
   } catch (error) {
     console.log(error);
   }
