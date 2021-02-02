@@ -32,7 +32,17 @@ exports.CreatePost = (req, res) => {
     });
 };
 
-exports.GetAllPosts = (req, res) => {};
+exports.GetAllPosts = async (req, res) => {
+  try {
+    const posts = await Post.find()
+    res.status(200).json({
+      Message:"Posts fetched successfully",
+      posts,
+    })
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 // exports.GetPost = (req, res) => {};
 
