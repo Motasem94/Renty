@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-const dotenv = require('dotenv');
-
+const dotenv = require("dotenv");
 
 const connectionOptions = {
   useCreateIndex: true,
@@ -12,7 +11,7 @@ const connectionOptions = {
 dotenv.config();
 
 mongoose
-  .connect(process.env.CONNECTION_URL,connectionOptions)
+  .connect(process.env.CONNECTION_URL, connectionOptions)
   .then(() => {
     console.log("Connected to DB");
   })

@@ -1,18 +1,23 @@
 const Post = require("../../models/post-model");
+const ValidatePost = require('./post-validation');
 
 exports.CreatePost = (req, res) => {
+
+  const { error } = ValidatePost.CreatePost(req.body);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
   const post = new Post();
 
-  post.titleUnit = req.body.titleUnit;
-  post.locationUnit = req.body.locationUnit;
-  post.descriptionUnit = req.body.descriptionUnit;
-  post.categoryUnit = req.body.categoryUnit;
-  post.guestsUnit = req.body.guestsUnit;
-  post.bedroomsUnit = req.body.bedroomsUnit;
-  post.bathroomsUnit = req.body.bathroomsUnit;
-  post.amenitiesUnit = req.body.amenitiesUnit;
-  post.imagesRentalUnit = req.body.imagesRentalUnit;
-
+  post.titleUnit = req.body.postTitle;
+  post.locationUnit = req.body.postLocation;
+  post.descriptionUnit = req.body.postDescription;
+  post.categoryUnit = req.body.postCategory;
+  post.guestsUnit = req.body.postGuests;
+  post.bedroomsUnit = req.body.postBedrooms;
+  post.bathroomsUnit = req.body.postBathrooms;
+  post.amenitiesUnit = req.body.postAmenities;
+  post.imagesRentalUnit = req.body.postImages;
 
   post
     .save()
@@ -27,7 +32,7 @@ exports.CreatePost = (req, res) => {
     });
 };
 
-// exports.GetAllPosts = (req, res) => {};
+exports.GetAllPosts = (req, res) => {};
 
 // exports.GetPost = (req, res) => {};
 
