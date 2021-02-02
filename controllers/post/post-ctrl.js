@@ -71,4 +71,18 @@ exports.UpdatePost = async (req, res) => {
   }
 };
 
-// exports.DeletePost = (req, res) => {};
+exports.DeletePost = (req, res) => {
+  const id = req.params.id;
+  Post.findByIdAndDelete(id).then((deletedPost) => {
+    if (!deletedPost) {
+      return res.json({
+        Message: "Not Found!",
+        Date: null,
+      });
+    }
+    res.json({
+      Message: "Deleted!",
+      Data: deletedPost,
+    });
+  });
+};
