@@ -1,8 +1,7 @@
 const Post = require("../../models/post-model");
-const ValidatePost = require('./post-validation');
+const ValidatePost = require("./post-validation");
 
 exports.CreatePost = (req, res) => {
-
   const { error } = ValidatePost.CreatePost(req.body);
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
@@ -34,17 +33,28 @@ exports.CreatePost = (req, res) => {
 
 exports.GetAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find()
+    const posts = await Post.find();
     res.status(200).json({
-      Message:"Posts fetched successfully",
+      Message: "Posts fetched successfully",
       posts,
-    })
+    });
   } catch (error) {
     console.log(error);
   }
 };
 
-// exports.GetPost = (req, res) => {};
+exports.GetPost = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const post = await Post.findById(id);
+    res.status(200).json({
+      Message: "Fetched Post successfully",
+      post,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 // exports.UpdatePost = (req, res) => {};
 
