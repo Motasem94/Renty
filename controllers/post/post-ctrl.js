@@ -1,11 +1,36 @@
 const Post = require("../../models/post-model");
 
-exports.CreatePost = (req, res) => {};
+exports.CreatePost = (req, res) => {
+  const post = new Post();
 
-exports.GetAllPosts = (req, res) => {};
+  post.titleUnit = req.body.titleUnit;
+  post.locationUnit = req.body.locationUnit;
+  post.descriptionUnit = req.body.descriptionUnit;
+  post.categoryUnit = req.body.categoryUnit;
+  post.guestsUnit = req.body.guestsUnit;
+  post.bedroomsUnit = req.body.bedroomsUnit;
+  post.bathroomsUnit = req.body.bathroomsUnit;
+  post.amenitiesUnit = req.body.amenitiesUnit;
+  post.imagesRentalUnit = req.body.imagesRentalUnit;
 
-exports.GetPost = (req, res) => {};
 
-exports.UpdatePost = (req, res) => {};
+  post
+    .save()
+    .then((response) => {
+      res.json({
+        Message: "Post created successfully",
+        Data: response,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
-exports.DeletePost = (req, res) => {};
+// exports.GetAllPosts = (req, res) => {};
+
+// exports.GetPost = (req, res) => {};
+
+// exports.UpdatePost = (req, res) => {};
+
+// exports.DeletePost = (req, res) => {};

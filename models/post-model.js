@@ -29,10 +29,9 @@ const PostSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    amenitiesUnit: {
-      type: String,
-      required: true,
-    },
+    amenitiesUnit:[
+      String
+    ],
     ratingUnit: {
       type: Number,
     },
