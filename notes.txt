@@ -12,6 +12,8 @@ patch >> http://localhost:4000//user/update/:id
 
 delete >> http://localhost:4000//user/delete/:id
 
+=====================================================
+
 /* routes of Post */
 
 post >> http://localhost:4000/post/create
@@ -23,3 +25,27 @@ get >> http://localhost:4000/post/:id
 patch >> http://localhost:4000/post/update/:id
 
 delete >> http://localhost:4000/post/delete/:id
+
+=====================================================
+
+/* User required request variables names */
+
+fName
+lName
+email
+
+=====================================================
+
+/* Post required request variables names */
+
+postTitle
+postLocation
+postDescription
+postCategory
+postGuests
+postBedrooms
+postBathrooms
+postAmenities
+postImages
+
+=====================================================
