@@ -1,15 +1,21 @@
 /*  */
 const path = require('path');
-const app = require("express")();
+const express = require("express");
 const bodyParser = require("body-parser");
 const db = require("./db/config");
 const userRouter = require("./routers/user/userRouter");
 const postRouter = require("./routers/post/postRouter");
 
+const app = express();
+
 /**********************************/
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+// app.use('/images',express.static(path.join(__dirname,'images')));
+
+
+
 db.on("error", console.error.bind(console, "MongoDB error: "));
 
 app.use("/", postRouter);
