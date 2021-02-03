@@ -28,24 +28,35 @@ delete >> http://localhost:4000/post/delete/:id
 
 =====================================================
 
-/* User required request variables names */
+/* User request variables names */
 
-fName
-lName
+firstName
+lastName
 email
+password
+phoneNumber
+profilePic
+rating
+about
+reviewsByUser
+reviewsAtUser
+address
 
 =====================================================
 
-/* Post required request variables names */
+/* Post request variables names */
 
-postTitle
-postLocation
-postDescription
-postCategory
-postGuests
-postBedrooms
-postBathrooms
-postAmenities
-postImages
+titleUnit
+locationUnit
+categoryUnit
+guestsUnit
+bedroomsUnit
+bathroomsUnit
+amenitiesUnit
+ratingUnit
+descriptionUnit
+reviewsAtUnit
+imagesRentalUnit
+rentalPriceUnit
 
 =====================================================

@@ -30,9 +30,6 @@ const UserSchema = mongoose.Schema(
     about: {
       type: String,
     },
-    languages: {
-      type: String,
-    },
     reviewsByUser: {
       type: String,
     },
