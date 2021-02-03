@@ -1,3 +1,4 @@
+const { number } = require("joi");
 const mongoose = require("mongoose");
 
 const PostSchema = mongoose.Schema(
@@ -41,6 +42,9 @@ const PostSchema = mongoose.Schema(
     },
     imagesRentalUnit: {
       type: String,
+    },
+    rentalPriceUnit: {
+      type: Number,
     },
   },
   { timestamps: true }

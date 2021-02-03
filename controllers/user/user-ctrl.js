@@ -19,8 +19,8 @@ exports.RegisterUser = async (req, res) => {
   /* Adding the user to database */
 
   const user = new User();
-  user.firstName = req.body.fName;
-  user.lastName = req.body.lName;
+  user.firstName = req.body.firstName;
+  user.lastName = req.body.lastName;
   user.email = req.body.email;
   user.password = password;
 
