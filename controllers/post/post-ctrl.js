@@ -1,23 +1,34 @@
 const Post = require("../../models/post-model");
 const ValidatePost = require("./post-validation");
 
-exports.CreatePost = (req, res) => {
-  const { error } = ValidatePost.CreatePost(req.body);
+exports.CreatePost = async (req, res) => {
+  try{
+  const { error } =  ValidatePost.CreatePost(req.body);
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-  const post = new Post();
+  const titleUnit = req.body.titleUnit;
+  const locationUnit = req.body.locationUnit;
+  const descriptionUnit = req.body.descriptionUnit;
+  const categoryUnit = req.body.categoryUnit;
+  const guestsUnit = req.body.guestsUnit;
+  const bedroomsUnit = req.body.bedroomsUnit;
+  const bathroomsUnit = req.body.bathroomsUnit;
+  const amenitiesUnit = req.body.amenitiesUnit;
+  const rentalPriceUnit = req.body.rentalPriceUnit;
 
-  post.titleUnit = req.body.titleUnit;
-  post.locationUnit = req.body.locationUnit;
-  post.descriptionUnit = req.body.descriptionUnit;
-  post.categoryUnit = req.body.categoryUnit;
-  post.guestsUnit = req.body.guestsUnit;
-  post.bedroomsUnit = req.body.bedroomsUnit;
-  post.bathroomsUnit = req.body.bathroomsUnit;
-  post.amenitiesUnit = req.body.amenitiesUnit;
-  post.imagesRentalUnit = req.body.imagesRentalUnit;
-  post.rentalPriceUnit = req.body.rentalPriceUnit;
+  const post = new Post({
+    titleUnit: titleUnit,
+    locationUnit: locationUnit,
+    descriptionUnit: descriptionUnit,
+    categoryUnit: categoryUnit,
+    guestsUnit: guestsUnit,
+    bedroomsUnit: bedroomsUnit,
+    bathroomsUnit: bathroomsUnit,
+    amenitiesUnit: amenitiesUnit,
+    rentalPriceUnit: rentalPriceUnit,
+  });
+
   post
     .save()
     .then((response) => {
@@ -29,6 +40,10 @@ exports.CreatePost = (req, res) => {
     .catch((err) => {
       console.log(err);
     });
+  }
+  catch(err){
+    console.log(err);
+  }
 };
 
 exports.GetAllPosts = async (req, res) => {
