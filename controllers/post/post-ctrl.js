@@ -8,7 +8,6 @@ exports.CreatePost = async (req, res, next) => {
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
-    console.log(req.userID);
     const post = new Post({
       userID: req.userID,
       titleUnit: req.body.titleUnit,
@@ -21,7 +20,7 @@ exports.CreatePost = async (req, res, next) => {
       amenitiesUnit: req.body.amenitiesUnit,
       rentalPriceUnit: req.body.rentalPriceUnit,
     });
-    const user = await User.findById(req.userID).populate("posts");
+    const user = await User.findById(req.userID);
     post
       .save()
       .then((response) => {
