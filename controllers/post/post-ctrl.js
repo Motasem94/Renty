@@ -2,7 +2,7 @@ const Post = require("../../models/post-model");
 const ValidatePost = require("./post-validation");
 const User = require("../../models/user-model");
 
-exports.CreatePost = async (req, res, next) => {
+exports.CreatePost = async (req, res) => {
   try {
     const { error } = ValidatePost.CreatePost(req.body);
     if (error) {
@@ -94,3 +94,16 @@ exports.DeletePost = (req, res) => {
     });
   });
 };
+
+exports.UploadImage = async (req,res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    post.imagesRentalUnit.push(req.file.path);
+    await post.save();
+    res.status(200).json({
+      Message: "Image uploaded successfully",
+    });
+  } catch (error) {
+    console.log(error); 
+  }
+}

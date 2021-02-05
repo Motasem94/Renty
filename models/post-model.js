@@ -40,9 +40,7 @@ const PostSchema = mongoose.Schema(
     reviewsAtUnit: {
       type: String,
     },
-    imagesRentalUnit: {
-      type: String,
-    },
+    imagesRentalUnit: [String],
     rentalPriceUnit: {
       type: Number,
     },

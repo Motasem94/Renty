@@ -8,5 +8,6 @@ router.get("/post/all", isAuth, PostCtrl.GetAllPosts);
 router.get("/post/:id", isAuth, PostCtrl.GetPost);
 router.patch("/post/update/:id", isAuth, PostCtrl.UpdatePost);
 router.delete("/post/delete/:id", isAuth, PostCtrl.DeletePost);
+router.patch("/post/image-upload/:id", isAuth, PostCtrl.UploadImage);
 
 module.exports = router;
