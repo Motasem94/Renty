@@ -58,7 +58,7 @@ exports.LoginUser = async (req, res) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
   res.header("Authorization", token).json({
     Message: "user login token",
-    Data: token,
+    token: token,
   });
 
   /* Redirect to Home Page */

@@ -1,12 +1,14 @@
 const Post = require("../../models/post-model");
 const ValidatePost = require("./post-validation");
+const User = require("../../models/user-model");
 
-exports.CreatePost = async (req, res) => {
+exports.CreatePost = async (req, res, next) => {
   try {
     const { error } = ValidatePost.CreatePost(req.body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
+    console.log(req.userID);
     const post = new Post({
       userID: req.userID,
       titleUnit: req.body.titleUnit,
@@ -19,7 +21,7 @@ exports.CreatePost = async (req, res) => {
       amenitiesUnit: req.body.amenitiesUnit,
       rentalPriceUnit: req.body.rentalPriceUnit,
     });
-
+    const user = await User.findById(req.userID).populate("posts");
     post
       .save()
       .then((response) => {
@@ -31,6 +33,8 @@ exports.CreatePost = async (req, res) => {
       .catch((err) => {
         console.log(err);
       });
+    user.posts.push(post._id);
+    await user.save();
   } catch (err) {
     console.log(err);
   }
