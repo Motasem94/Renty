@@ -1,35 +1,21 @@
 /* routes of User */
-
 post >> http://localhost:4000/register
-
 post >> http://localhost:4000/login
-
 get >> http://localhost:4000/user/all
-
 get >> http://localhost:4000/user/:id
-
 patch >> http://localhost:4000/user/update/:id
-
 delete >> http://localhost:4000/user/delete/:id
-
 =====================================================
-
 /* routes of Post */
-
 post >> http://localhost:4000/post/create
-
 get >> http://localhost:4000/post/all
-
 get >> http://localhost:4000/post/:id
-
 patch >> http://localhost:4000/post/update/:id
-
 delete >> http://localhost:4000/post/delete/:id
-
 =====================================================
-
 /* User request variables names */
-
+posts
+role
 firstName
 lastName
 email
@@ -41,11 +27,9 @@ about
 reviewsByUser
 reviewsAtUser
 address
-
 =====================================================
-
 /* Post request variables names */
-
+userID
 titleUnit
 locationUnit
 categoryUnit
@@ -58,5 +42,7 @@ descriptionUnit
 reviewsAtUnit
 imagesRentalUnit
 rentalPriceUnit
-
 =====================================================
+/* Token */
+- must be sent back from Header under "Authorization"
+- All routes of post manipulation require a Token in its Header
