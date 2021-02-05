@@ -2,13 +2,12 @@ const Post = require("../../models/post-model");
 const ValidatePost = require("./post-validation");
 const User = require("../../models/user-model");
 
-exports.CreatePost = async (req, res, next) => {
+exports.CreatePost = async (req, res) => {
   try {
     const { error } = ValidatePost.CreatePost(req.body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
-    console.log(req.userID);
     const post = new Post({
       userID: req.userID,
       titleUnit: req.body.titleUnit,
@@ -21,7 +20,7 @@ exports.CreatePost = async (req, res, next) => {
       amenitiesUnit: req.body.amenitiesUnit,
       rentalPriceUnit: req.body.rentalPriceUnit,
     });
-    const user = await User.findById(req.userID).populate("posts");
+    const user = await User.findById(req.userID);
     post
       .save()
       .then((response) => {
@@ -95,3 +94,16 @@ exports.DeletePost = (req, res) => {
     });
   });
 };
+
+exports.UploadImage = async (req,res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    post.imagesRentalUnit.push(req.file.path);
+    await post.save();
+    res.status(200).json({
+      Message: "Image uploaded successfully",
+    });
+  } catch (error) {
+    console.log(error); 
+  }
+}
