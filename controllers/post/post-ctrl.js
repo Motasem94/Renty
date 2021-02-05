@@ -1,11 +1,17 @@
 const Post = require("../../models/post-model");
 const ValidatePost = require("./post-validation");
+const path = require('path');
 
 exports.CreatePost = (req, res) => {
   const { error } = ValidatePost.CreatePost(req.body);
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
+  if (!req.file) {
+    console.log("please upload a file");
+    return res.send('Please upload a file');
+  };
+ 
   const post = new Post();
 
   post.titleUnit = req.body.titleUnit;
@@ -16,8 +22,9 @@ exports.CreatePost = (req, res) => {
   post.bedroomsUnit = req.body.bedroomsUnit;
   post.bathroomsUnit = req.body.bathroomsUnit;
   post.amenitiesUnit = req.body.amenitiesUnit;
-  post.imagesRentalUnit = req.body.imagesRentalUnit;
+  post.imagesRentalUnit = req.file.path; //modified with the path to the images folder
   post.rentalPriceUnit = req.body.rentalPriceUnit;
+
   post
     .save()
     .then((response) => {

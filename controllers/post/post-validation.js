@@ -9,7 +9,7 @@ exports.CreatePost = (data) => {
     guestsUnit: Joi.number().min(1).max(20).required(),
     bedroomsUnit: Joi.number().min(1).max(20).required(),
     bathroomsUnit: Joi.number().min(1).max(20).required(),
-    amenitiesUnit: Joi.array().items(Joi.string()).max(8).required(),
+    amenitiesUnit: Joi.array().items(Joi.string()).max(8),
     rentalPriceUnit: Joi.number().min(1).max(1000).required(),
   });
   return schema.validate(data);
