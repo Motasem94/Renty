@@ -7,6 +7,7 @@ const db = require("./db/config");
 const userRouter = require("./routers/user/userRouter");
 const postRouter = require("./routers/post/postRouter");
 const multer = require("multer");
+const cors = require('cors');
 const app = express();
 
 /**********************************/
@@ -33,6 +34,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")

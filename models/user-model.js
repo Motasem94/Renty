@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
-
 const UserSchema = mongoose.Schema(
   {
+    role: {
+      type: String,
+      default: "basic",
+      enum: ["basic", "admin"],
+    },
     firstName: {
       type: String,
       required: true,
@@ -19,7 +23,7 @@ const UserSchema = mongoose.Schema(
       required: true,
     },
     phoneNumber: {
-      type: Number
+      type: Number,
     },
     profilePic: {
       type: String,
@@ -39,6 +43,7 @@ const UserSchema = mongoose.Schema(
     address: {
       type: String,
     },
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
   },
   { timestamps: true }
 );

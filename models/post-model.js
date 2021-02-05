@@ -1,10 +1,10 @@
-const { number } = require("joi");
 const mongoose = require("mongoose");
 
 const PostSchema = mongoose.Schema(
   {
     userID: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
     titleUnit: {
       type: String,

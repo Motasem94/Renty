@@ -2,46 +2,36 @@ const Post = require("../../models/post-model");
 const ValidatePost = require("./post-validation");
 
 exports.CreatePost = async (req, res) => {
-  try{
-  const { error } =  ValidatePost.CreatePost(req.body);
-  if (error) {
-    return res.status(400).json({ error: error.details[0].message });
-  }
-  const titleUnit = req.body.titleUnit;
-  const locationUnit = req.body.locationUnit;
-  const descriptionUnit = req.body.descriptionUnit;
-  const categoryUnit = req.body.categoryUnit;
-  const guestsUnit = req.body.guestsUnit;
-  const bedroomsUnit = req.body.bedroomsUnit;
-  const bathroomsUnit = req.body.bathroomsUnit;
-  const amenitiesUnit = req.body.amenitiesUnit;
-  const rentalPriceUnit = req.body.rentalPriceUnit;
-
-  const post = new Post({
-    titleUnit: titleUnit,
-    locationUnit: locationUnit,
-    descriptionUnit: descriptionUnit,
-    categoryUnit: categoryUnit,
-    guestsUnit: guestsUnit,
-    bedroomsUnit: bedroomsUnit,
-    bathroomsUnit: bathroomsUnit,
-    amenitiesUnit: amenitiesUnit,
-    rentalPriceUnit: rentalPriceUnit,
-  });
-
-  post
-    .save()
-    .then((response) => {
-      res.json({
-        Message: "Post created successfully",
-        Data: response,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
+  try {
+    const { error } = ValidatePost.CreatePost(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+    const post = new Post({
+      userID: req.userID,
+      titleUnit: req.body.titleUnit,
+      locationUnit: req.body.locationUnit,
+      descriptionUnit: req.body.descriptionUnit,
+      categoryUnit: req.body.categoryUnit,
+      guestsUnit: req.body.guestsUnit,
+      bedroomsUnit: req.body.bedroomsUnit,
+      bathroomsUnit: req.body.bathroomsUnit,
+      amenitiesUnit: req.body.amenitiesUnit,
+      rentalPriceUnit: req.body.rentalPriceUnit,
     });
-  }
-  catch(err){
+
+    post
+      .save()
+      .then((response) => {
+        res.json({
+          Message: "Post created successfully",
+          Data: response,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch (err) {
     console.log(err);
   }
 };
