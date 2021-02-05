@@ -119,3 +119,17 @@ exports.DeleteUser = (req, res) => {
     });
   });
 };
+
+exports.ImageProfile = async (req,res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id,{
+      profilePic: req.file.path
+    });
+    await user.save();
+    res.status(200).json({
+      Message: "Profile image uploaded successfully",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}

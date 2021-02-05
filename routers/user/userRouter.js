@@ -8,5 +8,6 @@ router.get("/user/all", UserCtrl.GetAllUsers);
 router.get("/user/:id", UserCtrl.GetUser);
 router.patch("/user/update/:id", UserCtrl.UpdateUser);
 router.delete("/user/delete/:id", UserCtrl.DeleteUser);
+router.patch("/post/image-profile/:id", UserCtrl.ImageProfile);
 
 module.exports = router;
