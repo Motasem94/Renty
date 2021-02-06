@@ -5,7 +5,7 @@ const PostSchema = mongoose.Schema(
     statusUnit: {
       type: String,
       default: "pending",
-      enum: ["pending", "rejected","approved"],
+      enum: ["pending", "reject","approve"],
     },
     userID: {
       type: mongoose.Schema.Types.ObjectId,

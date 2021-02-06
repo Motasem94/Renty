@@ -44,6 +44,7 @@ exports.GetAllPosts = async (req, res) => {
     const posts = await Post.find();
     res.status(200).json({
       Message: "Posts fetched successfully",
+      NumberOfPosts: posts.length,
       posts,
     });
   } catch (error) {
@@ -95,7 +96,7 @@ exports.DeletePost = (req, res) => {
   });
 };
 
-exports.UploadImage = async (req,res) => {
+exports.UploadImage = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     post.imagesRentalUnit.push(req.file.path);
@@ -104,6 +105,40 @@ exports.UploadImage = async (req,res) => {
       Message: "Image uploaded successfully",
     });
   } catch (error) {
-    console.log(error); 
+    console.log(error);
   }
-}
+};
+
+exports.UpdatePostStatus = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const post = await Post.findByIdAndUpdate(
+      id,
+      {
+        statusUnit: req.body.statusUnit,
+      },
+      {
+        new: true,
+      }
+    );
+    res.status(200).json({
+      Message: "Post status changed!",
+      post,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.GetAllApprovedPosts = async (req, res) => {
+  try {
+    const posts = await Post.find({statusUnit: "approve"});
+    res.status(200).json({
+      Message: "Posts fetched successfully",
+      NumberOfPosts: posts.length,
+      posts,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
