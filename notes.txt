@@ -1,19 +1,21 @@
 /* routes of User */
 post >> http://localhost:4000/register
 post >> http://localhost:4000/login
-get >> http://localhost:4000/user/all
-get >> http://localhost:4000/user/:id
-patch >> http://localhost:4000/user/update/:id
-delete >> http://localhost:4000/user/delete/:id
-patch >> http://localhost:4000/post/image-profile/:id
+get >> http://localhost:4000/user/all // MUST BE ADMIN & TOKEN
+get >> http://localhost:4000/user/:id // MUST TOKEN
+patch >> http://localhost:4000/user/update/:id // MUST TOKEN
+delete >> http://localhost:4000/user/delete/:id // MUST BE ADMIN & TOKEN
+patch >> http://localhost:4000/post/image-profile/:id // MUST TOKEN
 =====================================================
 /* routes of Post */
-post >> http://localhost:4000/post/create
-get >> http://localhost:4000/post/all
-get >> http://localhost:4000/post/:id
-patch >> http://localhost:4000/post/update/:id
-delete >> http://localhost:4000/post/delete/:id
-patch >> http://localhost:4000/post/image-upload/:id
+get >> http://localhost:4000/post/all/approved
+post >> http://localhost:4000/post/create // MUST TOKEN
+get >> http://localhost:4000/post/all // MUST BE ADMIN & TOKEN
+get >> http://localhost:4000/post/:id // MUST TOKEN
+patch >> http://localhost:4000/post/update/:id // MUST TOKEN
+delete >> http://localhost:4000/post/delete/:id // MUST TOKEN
+patch >> http://localhost:4000/post/image-upload/:id // MUST TOKEN
+patch >> http://localhost:4000/post/pendeing-action/:id // MUST BE ADMIN & TOKEN
 =====================================================
 /* User request variables names */
 posts
