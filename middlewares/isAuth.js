@@ -9,5 +9,6 @@ module.exports = (req,res,next)=>{
         console.log(error)
     }
     req.userID = decodeToken.id;
+    req.role = decodeToken.role;
     next();
 }

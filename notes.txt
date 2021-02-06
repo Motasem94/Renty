@@ -48,3 +48,9 @@ rentalPriceUnit
 /* Token */
 - must be sent back from Header under "Authorization"
 - All routes of post manipulation require a Token in its Header
+=====================================================
+/* Admin User */
+- only admin user can get all users/posts & can delete user!
+"email":"admin@renty.com",
+"password":"admin1"
+=====================================================
