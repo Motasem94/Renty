@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const PostSchema = mongoose.Schema(
   {
+    statusUnit: {
+      type: String,
+      default: "pending",
+      enum: ["pending", "rejected","approved"],
+    },
     userID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

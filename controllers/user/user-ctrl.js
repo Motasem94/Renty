@@ -55,7 +55,13 @@ exports.LoginUser = async (req, res) => {
     return res.status(400).json({ error: "Wrong Password" });
   }
   /* JWT Generate */
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+  const token = jwt.sign(
+    {
+      id: user._id,
+      role: user.role,
+    },
+    process.env.JWT_SECRET
+  );
   res.header("Authorization", token).json({
     Message: "user login token",
     token: token,
@@ -120,10 +126,10 @@ exports.DeleteUser = (req, res) => {
   });
 };
 
-exports.ImageProfile = async (req,res) => {
+exports.ImageProfile = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id,{
-      profilePic: req.file.path
+    const user = await User.findByIdAndUpdate(req.params.id, {
+      profilePic: req.file.path,
     });
     await user.save();
     res.status(200).json({
@@ -132,4 +138,4 @@ exports.ImageProfile = async (req,res) => {
   } catch (error) {
     console.log(error);
   }
-}
+};
