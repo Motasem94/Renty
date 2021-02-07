@@ -60,3 +60,8 @@ imagesRentalUnit
 rentalPriceUnit
 
 =====================================================
+to test pagination in post man :
+in fetch all posts controller
+
+take the route /post/all 
+and in params section in postman add a key-value pair with key = page and value = any number 
