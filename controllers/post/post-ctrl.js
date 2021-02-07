@@ -7,10 +7,7 @@ exports.CreatePost = (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-  if (!req.file) {
-    console.log("please upload a file");
-    return res.send('Please upload a file');
-  };
+ console.log(req.file.path);
  
   const post = new Post();
 
@@ -39,15 +36,40 @@ exports.CreatePost = (req, res) => {
 };
 
 exports.GetAllPosts = async (req, res) => {
-  try {
-    const posts = await Post.find();
+
+  const currentPage= req.query.page || 1 ;  //in the front end we extract the query parameter which is called page 
+  //this line of code means if this value is undefined "req.query.page" we would assign "one" to the variable 
+  const perPage=2; //this 2 is hard coded , this value should match the value in the front end 
+
+  let totalItems; //we will use this variable to store the number of items in the database
+  
+  Post.find().countDocuments()
+  .then(count=>{
+    totalItems=count;
+    return Post.find()
+    .skip((currentPage-1)*perPage)
+    .limit(perPage)
+  })
+  .then(posts=>{
     res.status(200).json({
-      Message: "Posts fetched successfully",
-      posts,
-    });
-  } catch (error) {
-    console.log(error);
-  }
+      Message:"Posts fetched successfully",
+      posts : posts,
+      totalItems:totalItems // this is added to the data i returned in the response ,the response is sent to the front end , code in front should look for this variable and use it 
+    })
+  })
+  .catch(err=>{
+    console.log(err);
+  });
+
+  // try {
+  //   const posts = await Post.find();
+  //   res.status(200).json({
+  //     Message: "Posts fetched successfully",
+  //     posts,
+  //   });
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 
 exports.GetPost = async (req, res) => {
