@@ -99,7 +99,7 @@ exports.DeletePost = (req, res) => {
 exports.UploadImage = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    post.imagesRentalUnit.push(req.file.path);
+    post.imagesRentalUnit.push(req.files.path);
     await post.save();
     res.status(200).json({
       Message: "Image uploaded successfully",
