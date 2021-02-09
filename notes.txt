@@ -5,7 +5,7 @@ get >> http://localhost:4000/user/all // MUST BE ADMIN & TOKEN
 get >> http://localhost:4000/user/:id // MUST TOKEN
 patch >> http://localhost:4000/user/update/:id // MUST TOKEN
 delete >> http://localhost:4000/user/delete/:id // MUST BE ADMIN & TOKEN
-patch >> http://localhost:4000/post/image-profile/:id // MUST TOKEN
+patch >> http://localhost:4000/user/image-profile/:id // MUST TOKEN
 =====================================================
 /* routes of Post */
 get >> http://localhost:4000/post/all/approved

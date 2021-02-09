@@ -2,6 +2,9 @@ const jwt = require("jsonwebtoken");
 const { registerValidation, loginValidation } = require("./user-validation");
 const User = require("../../models/user-model");
 const bcrypt = require("bcrypt");
+const fs = require("fs");
+const { promisify } = require("util");
+const unlinkAsync = promisify(fs.unlink);
 
 exports.RegisterUser = async (req, res) => {
   /* validation of the user data @ register */
@@ -129,13 +132,15 @@ exports.DeleteUser = (req, res) => {
 
 exports.ImageProfile = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, {
-      profilePic: req.file.path,
-    });
+    const user = await User.findById(req.params.id);
+    const oldProfilePic = user.profilePic;
+    user.profilePic = req.file.path;
     await user.save();
     res.status(200).json({
       Message: "Profile image uploaded successfully",
+      Data: user,
     });
+    await unlinkAsync(oldProfilePic);
   } catch (error) {
     console.log(error);
   }
