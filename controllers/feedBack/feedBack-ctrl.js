@@ -6,6 +6,7 @@ exports.CreateFeedBack = async (req, res) => {
   try {
     const user = await User.findById(req.userID);
     const post = await Post.findById(req.body.feedbackPostID);
+    // Check if an array contains any element of another array in JavaScript
     const isFound = user.bookings.some((i) => post.bookings(i) >= 0);
     if (!isFound) {
       return res.status(400).json({
@@ -48,6 +49,7 @@ exports.DeleteFeedBack = async (req, res) => {
   }
 };
 
+// average function
 function avg(arr, len) {
   let sum = 0;
   for (let i = 0; i < len; i++) {
