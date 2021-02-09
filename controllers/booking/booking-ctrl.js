@@ -82,4 +82,18 @@ exports.UpdateBooking = async (req, res) => {
   }
 };
 
-exports.DeleteBooking = (req, res) => {};
+exports.CancelBooking = (req, res) => {
+  const id = req.params.id;
+  Booking.findByIdAndDelete(id).then((canceledBooking) => {
+    if (!canceledBooking) {
+      return res.json({
+        Message: "Not Found!",
+        Date: null,
+      });
+    }
+    res.json({
+      Message: "Deleted!",
+      Data: canceledBooking,
+    });
+  });
+};
