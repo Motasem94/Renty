@@ -5,7 +5,7 @@ const PostSchema = mongoose.Schema(
     statusUnit: {
       type: String,
       default: "pending",
-      enum: ["pending", "reject","approve"],
+      enum: ["pending", "reject", "approve"],
     },
     userID: {
       type: mongoose.Schema.Types.ObjectId,
@@ -49,6 +49,7 @@ const PostSchema = mongoose.Schema(
     rentalPriceUnit: {
       type: Number,
     },
+    bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Booking" }],
   },
   { timestamps: true }
 );

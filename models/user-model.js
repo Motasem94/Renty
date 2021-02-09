@@ -44,6 +44,7 @@ const UserSchema = mongoose.Schema(
       type: String,
     },
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
+    bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Booking" }],
   },
   { timestamps: true }
 );

@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const db = require("./db/config");
 const userRouter = require("./routers/user/userRouter");
 const postRouter = require("./routers/post/postRouter");
+const bookingRouter = require("./routers/booking/bookingRouter");
 const cors = require("cors");
 const app = express();
 
@@ -19,6 +20,7 @@ db.on("error", console.error.bind(console, "MongoDB error: "));
 
 app.use("/", postRouter);
 app.use("/", userRouter);
+app.use("/", bookingRouter);
 
 app.listen(4000, () => {
   console.log("Server @ 4000");
