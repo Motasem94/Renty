@@ -1,14 +1,14 @@
 const jwt = require("jsonwebtoken");
 
-module.exports = (req,res,next)=>{
-    const token = req.get('Authorization');
+module.exports = async (req, res, next) => {
+  try {
+    const token = await req.get("Authorization");
     let decodeToken;
-    try {
-        decodeToken = jwt.verify(token,process.env.JWT_SECRET);
-    } catch (error) {
-        console.log(error)
-    }
+    decodeToken = jwt.verify(token, process.env.JWT_SECRET);
     req.userID = decodeToken.id;
     req.role = decodeToken.role;
-    next();
-}
+  } catch (error) {
+    console.log(error);
+  }
+  next();
+};

@@ -8,7 +8,7 @@ delete >> http://localhost:4000/user/delete/:id // MUST BE ADMIN & TOKEN
 patch >> http://localhost:4000/user/image-profile/:id // MUST TOKEN
 =====================================================
 /* routes of Post */
-get >> http://localhost:4000/post/all/approved
+get >> http://localhost:4000/post/all/approved // no token nor admin
 post >> http://localhost:4000/post/create // MUST TOKEN
 get >> http://localhost:4000/post/all // MUST BE ADMIN & TOKEN
 get >> http://localhost:4000/post/:id // MUST TOKEN

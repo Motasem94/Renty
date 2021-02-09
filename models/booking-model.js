@@ -18,10 +18,6 @@ const BookingSchema = mongoose.Schema({
     type: Number,
     required: [true, "Total amount is required"],
   },
-  guests: {
-    type: Number,
-    required: [true, "Number of guests is required"],
-  },
   adults: {
     type: Number,
   },

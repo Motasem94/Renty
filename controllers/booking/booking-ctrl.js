@@ -6,6 +6,7 @@ exports.CreateBooking = async (req, res) => {
   try {
     const user = await User.findById(req.userID);
     const post = await Post.findById(req.body.bookedPost);
+    const calculatedAmount = (req.body.checkOut - req.body.checkIn)*post.rentalPriceUnit;
     if (post.userID.equals(req.userID)) {
       return res.status(400).json({
         error: "You book your own unit??",
@@ -16,8 +17,7 @@ exports.CreateBooking = async (req, res) => {
       bookedPost: req.body.bookedPost,
       checkIn: req.body.checkIn,
       checkOut: req.body.checkOut,
-      amount: req.body.amount,
-      guests: req.body.guests,
+      amount: calculatedAmount,
       adults: req.body.adults,
       children: req.body.children,
     });
