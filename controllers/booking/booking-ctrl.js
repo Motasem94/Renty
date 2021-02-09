@@ -54,7 +54,7 @@ exports.GetAllBooking = async (req, res) => {
   }
 };
 
-exports.GetBookingOfUnit = (req, res) => {
+exports.GetBookingOfUnit = async (req, res) => {
   try {
     const id = req.params.id;
     const booking = await Booking.findById(id);
@@ -67,6 +67,19 @@ exports.GetBookingOfUnit = (req, res) => {
   }
 };
 
-exports.UpdateBooking = (req, res) => {};
+exports.UpdateBooking = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const booking = await Booking.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    res.status(200).json({
+      Message: "Booking updated successfully",
+      booking,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 exports.DeleteBooking = (req, res) => {};
