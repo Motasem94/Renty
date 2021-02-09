@@ -34,12 +34,7 @@ const UserSchema = mongoose.Schema(
     about: {
       type: String,
     },
-    reviewsByUser: {
-      type: String,
-    },
-    reviewsAtUser: {
-      type: String,
-    },
+    reviewsByUser: [{ type: String }],
     address: {
       type: String,
     },

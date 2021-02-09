@@ -7,48 +7,20 @@ const PostSchema = mongoose.Schema(
       default: "pending",
       enum: ["pending", "reject", "approve"],
     },
-    userID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-    titleUnit: {
-      type: String,
-      required: true,
-    },
-    locationUnit: {
-      type: String,
-      required: true,
-    },
-    categoryUnit: {
-      type: String,
-      required: true,
-    },
-    guestsUnit: {
-      type: Number,
-      required: true,
-    },
-    bedroomsUnit: {
-      type: Number,
-      required: true,
-    },
-    bathroomsUnit: {
-      type: Number,
-      required: true,
-    },
+    userID: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    titleUnit: { type: String, required: true },
+    locationUnit: { type: String, required: true },
+    categoryUnit: { type: String, required: true },
+    guestsUnit: { type: Number, required: true },
+    bedroomsUnit: { type: Number, required: true },
+    bathroomsUnit: { type: Number, required: true },
     amenitiesUnit: [String],
-    ratingUnit: {
-      type: Number,
-    },
-    descriptionUnit: {
-      type: String,
-    },
-    reviewsAtUnit: {
-      type: String,
-    },
+    ratingsUnit: [{ type: Number }],
+    cumulativeRatingUnit: { type: Number },
+    descriptionUnit: { type: String },
+    reviewsAtUnit: [{ type: mongoose.Schema.Types.ObjectId, ref: "FeedBack" }],
     imagesRentalUnit: [String],
-    rentalPriceUnit: {
-      type: Number,
-    },
+    rentalPriceUnit: { type: Number },
     bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Booking" }],
   },
   { timestamps: true }
