@@ -134,13 +134,12 @@ exports.DeleteUser = (req, res) => {
 
 exports.ImageProfile = async (req, res) => {
   try {
-    if (!req.files) {
+    if (!req.file) {
       return res.status(200).json({
         Message: "No Image uploaded",
       });
     }
     const user = await User.findById(req.userID);
-    console.log(req.file.path);
     const oldProfilePic = user.profilePic;
     user.profilePic = req.file.path;
     await user.save();
