@@ -90,8 +90,8 @@ exports.GetUser = async (req, res) => {
       path: "posts",
       populate: {
         path: "reviewsAtUnit",
-        model:"FeedBack"
-      }
+        model: "FeedBack",
+      },
     });
     res.status(200).json({
       Message: "Fetched the User successfully",
@@ -135,12 +135,13 @@ exports.DeleteUser = (req, res) => {
 exports.ImageProfile = async (req, res) => {
   try {
     const user = await User.findById(req.userID);
+    console.log(req.file.path);
     const oldProfilePic = user.profilePic;
     user.profilePic = req.file.path;
     await user.save();
     res.status(200).json({
       Message: "Profile image uploaded successfully",
-      profilePic,
+      Data:user.profilePic,
     });
     await unlinkAsync(oldProfilePic);
   } catch (error) {

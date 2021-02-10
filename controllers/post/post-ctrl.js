@@ -1,6 +1,9 @@
 const Post = require("../../models/post-model");
 const ValidatePost = require("./post-validation");
 const User = require("../../models/user-model");
+const fs = require("fs");
+const { promisify } = require("util");
+const unlinkAsync = promisify(fs.unlink);
 
 exports.CreatePost = async (req, res) => {
   try {
@@ -41,11 +44,19 @@ exports.CreatePost = async (req, res) => {
 
 exports.GetAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find();
+    const pendingPosts = await Post.find({ statusUnit: "pending" });
+    const approvePosts = await Post.find({ statusUnit: "approve" });
+    const rejectPosts = await Post.find({ statusUnit: "reject" });
     res.status(200).json({
       Message: "Posts fetched successfully",
-      NumberOfPosts: posts.length,
-      posts,
+      NumberOfAllPosts:
+        pendingPosts.length + approvePosts.length + rejectPosts.length,
+      NumberOf_PendingPosts: pendingPosts.length,
+      NumberOf_ApprovePosts: approvePosts.length,
+      NumberOf_RejectPosts: rejectPosts.length,
+      pendingPosts,
+      approvePosts,
+      rejectPosts,
     });
   } catch (error) {
     console.log(error);
@@ -55,7 +66,16 @@ exports.GetAllPosts = async (req, res) => {
 exports.GetPost = async (req, res) => {
   try {
     const id = req.params.id;
-    const post = await Post.findById(id);
+    const post = await Post.findById(id)
+      .populate("userID", "firstName profilePic")
+      .populate({
+        path: "reviewsAtUnit",
+        select: "rate review",
+        populate: {
+          path: "userID",
+          select: "firstName profilePic",
+        },
+      });
     res.status(200).json({
       Message: "Fetched Post successfully",
       post,
@@ -98,12 +118,30 @@ exports.DeletePost = (req, res) => {
 
 exports.UploadImage = async (req, res) => {
   try {
+    if(!req.files){
+      return res.status(200).json({
+        Message: "No Image uploaded"
+      })
+    }
+    if (req.files.length === 0) {
+      return res.status(200).json({
+        Message: "No Image uploaded"
+      })
+    }
     const post = await Post.findById(req.params.id);
-    post.imagesRentalUnit.push(req.files.path);
+    const oldImages = arrPathsOld(
+      post.imagesRentalUnit,
+      post.imagesRentalUnit.length
+    );
+    post.imagesRentalUnit = arrPaths(req.files, req.files.length);
     await post.save();
     res.status(200).json({
-      Message: "Image uploaded successfully",
+      Message: "Images uploaded successfully",
+      Data: post.imagesRentalUnit,
     });
+    for (let i = 0; i < oldImages.length; i++) {
+      await unlinkAsync(oldImages[i]);
+    }
   } catch (error) {
     console.log(error);
   }
@@ -114,16 +152,12 @@ exports.UpdatePostStatus = async (req, res) => {
     const id = req.params.id;
     const post = await Post.findByIdAndUpdate(
       id,
-      {
-        statusUnit: req.body.statusUnit,
-      },
-      {
-        new: true,
-      }
+      { statusUnit: req.body.statusUnit },
+      { new: true }
     );
     res.status(200).json({
       Message: "Post status changed!",
-      post,
+      statusUnit,
     });
   } catch (error) {
     console.log(error);
@@ -132,13 +166,33 @@ exports.UpdatePostStatus = async (req, res) => {
 
 exports.GetAllApprovedPosts = async (req, res) => {
   try {
-    const posts = await Post.find({statusUnit: "approve"});
+    const posts = await Post.find({ statusUnit: "approve" }).populate(
+      "userID",
+      "firstName profilePic"
+    );
     res.status(200).json({
       Message: "Posts fetched successfully",
-      NumberOfPosts: posts.length,
+      NumberOfPosts_Approved: posts.length,
       posts,
     });
   } catch (error) {
     console.log(error);
   }
 };
+
+function arrPaths(ArrObjFiles, len) {
+  const arr = [];
+  for (let i = 0; i < len; i++) {
+    arr.push(ArrObjFiles[i].path);
+  }
+  return arr;
+}
+function arrPathsOld(ArrObjFiles,len) {
+  const arr = [];
+  for (let i = 0; i < len; i++) {
+    let str = new String(ArrObjFiles[i]);
+    str = str.replace(/\\/g,'\\');;
+    arr.push(str);
+  }
+  return arr;
+}

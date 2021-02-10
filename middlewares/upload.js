@@ -25,5 +25,4 @@ const fileFilter = (req, file, cb) => {
 exports.image = multer({
   storage: fileStorage,
   fileFilter: fileFilter,
-  dest: __dirname + "../images",
 });
