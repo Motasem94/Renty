@@ -14,7 +14,7 @@ router.delete("/user/delete/:id", isAuth, isAdmin, UserCtrl.DeleteUser);
 router.patch(
   "/user/image-profile",
   isAuth,
-  upload.image.single("userImg"),
+  upload.image.single("profilePic"),
   UserCtrl.ImageProfile
 );
 

@@ -134,6 +134,11 @@ exports.DeleteUser = (req, res) => {
 
 exports.ImageProfile = async (req, res) => {
   try {
+    if (!req.files) {
+      return res.status(200).json({
+        Message: "No Image uploaded",
+      });
+    }
     const user = await User.findById(req.userID);
     console.log(req.file.path);
     const oldProfilePic = user.profilePic;
@@ -141,7 +146,7 @@ exports.ImageProfile = async (req, res) => {
     await user.save();
     res.status(200).json({
       Message: "Profile image uploaded successfully",
-      Data:user.profilePic,
+      Data: user.profilePic,
     });
     await unlinkAsync(oldProfilePic);
   } catch (error) {
