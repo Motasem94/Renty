@@ -6,6 +6,6 @@ const feedBackCtrl = require("../../controllers/feedBack/feedBack-ctrl");
 
 router.post("/feedback", isAuth, feedBackCtrl.CreateFeedBack);
 // router.get("/feedback/:postid", isAuth, feedBackCtrl.GetFeedBack);
-// router.delete("/feedback/:id", isAuth, isAdmin, feedBackCtrl.DeleteFeedBack);
+// router.delete("/feedback/:postid", isAuth, isAdmin, feedBackCtrl.DeleteFeedBack);
 
 module.exports = router;

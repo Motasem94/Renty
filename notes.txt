@@ -1,25 +1,60 @@
 /* routes of User */
 /* Token is a must in all routes except register & login */
+
 post >> http://localhost:4000/register
 post >> http://localhost:4000/login
+
 get >> http://localhost:4000/user/all
 get >> http://localhost:4000/user
 patch >> http://localhost:4000/user/update
 delete >> http://localhost:4000/user/delete/:id
 patch >> http://localhost:4000/user/image-profile
 =====================================================
+
 /* routes of Post */
-get >> http://localhost:4000/post/all/approved
-post >> http://localhost:4000/post/create 
-get >> http://localhost:4000/post/all
-get >> http://localhost:4000/post/:id 
-patch >> http://localhost:4000/post/update/:id 
-delete >> http://localhost:4000/post/delete/:id 
-patch >> http://localhost:4000/post/image-upload/:id 
-patch >> http://localhost:4000/post/pendeing-action/:id
+
+
+get >> http://localhost:4000/post/all/approved  //nothing is needed
+get >> http://localhost:4000/post/:id //nothing is needed
+
+
+post >> http://localhost:4000/post/create // token
+patch >> http://localhost:4000/post/update/:id // token
+delete >> http://localhost:4000/post/delete/:id // token
+patch >> http://localhost:4000/post/image-upload/:id // token
+
+
+get >> http://localhost:4000/post/all // token & admin
+patch >> http://localhost:4000/post/pendeing-action/:id // token & admin
 =====================================================
+
+/* routes of Post */
+
+/* All require token */
+
+post >> http://localhost:4000/book
+get >> http://localhost:4000/book/:id
+patch >> http://localhost:4000/book/:id
+delete >> http://localhost:4000/book/:id
+
+get >> http://localhost:4000//book/all  // only admin
+
+=====================================================
+
+/* routes of Post */
+
+/* All require token */
+
+post >> http://localhost:4000/feedback
+*****get >> http://localhost:4000/feedback/:postid
+*****delete >> http://localhost:4000feedback/:postid // only admin
+
+***** = لسه مخلصش
+
+=====================================================
+
 /* User request variables names */
-posts
+
 role
 firstName
 lastName
@@ -29,11 +64,15 @@ phoneNumber
 profilePic
 rating
 about
-reviewsByUser
-reviewsAtUser
 address
+reviewsByUser
+posts
+bookings
 =====================================================
+
 /* Post request variables names */
+
+statusUnit
 userID
 titleUnit
 locationUnit
@@ -43,11 +82,34 @@ bedroomsUnit
 bathroomsUnit
 amenitiesUnit
 ratingUnit
+cumulativeRatingUnit
 descriptionUnit
 reviewsAtUnit
 imagesRentalUnit
 rentalPriceUnit
+bookings
 =====================================================
+
+/* Booking request variables names */
+
+bookingUser
+bookedPost
+checkIn
+checkOut
+amount
+children
+
+=====================================================
+
+/* FeedBack request variables names */
+
+rate
+review
+userID
+postID
+
+=====================================================
+
 /* Token */
 - must be sent back from Header under "Authorization"
 - All routes of post manipulation require a Token in its Header
