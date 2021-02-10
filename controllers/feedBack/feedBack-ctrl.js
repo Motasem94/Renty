@@ -7,15 +7,25 @@ exports.CreateFeedBack = async (req, res) => {
     const user = await User.findById(req.userID);
     const post = await Post.findById(req.body.feedbackPostID);
     // Check if an array contains any element of another array in JavaScript
-    const isFound = user.bookings.some((i) => post.bookings(i) >= 0);
+    const isFound = user.bookings.some((i) => post.bookings.indexOf(i) >= 0);
     if (!isFound) {
       return res.status(400).json({
         Message: "Can't rate it if you never booked it",
       });
     }
+    const isReviewed = user.reviewsByUser.some(
+      (i) => post.reviewsAtUnit.indexOf(i) >= 0
+    );
+    if (isReviewed) {
+      return res.status(400).json({
+        Message: "Reviewd by you before",
+      });
+    }
     const feedBack = new FeedBack({
       rate: req.body.rate,
       review: req.body.review,
+      userID: user._id,
+      postID: post._id,
     });
     feedBack.save().then((response) => {
       res.json({
@@ -35,12 +45,14 @@ exports.CreateFeedBack = async (req, res) => {
   }
 };
 
-exports.GetFeedBack = async (req, res) => {
-  try {
-  } catch (error) {
-    console.log(error);
-  }
-};
+// exports.GetFeedBack = async (req, res) => {
+//   try {
+//     const post = await Post.findById(req.params.postid);
+
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 exports.DeleteFeedBack = async (req, res) => {
   try {
