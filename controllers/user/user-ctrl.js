@@ -27,18 +27,18 @@ exports.RegisterUser = async (req, res) => {
   user.email = req.body.email;
   user.password = password;
 
-  user
-    .save()
-    .then((response) => {
-      res.json({
-        Message: "User registered successfully",
-        Data: response,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  /* Redirect to Login Page */
+  user.save();
+  const token = jwt.sign(
+    {
+      id: user._id,
+      role: user.role,
+    },
+    process.env.JWT_SECRET
+  );
+  res.status(200).header("Authorization", token).json({
+    Message: "User registered",
+    token: token,
+  });
 };
 
 exports.LoginUser = async (req, res) => {
@@ -66,11 +66,9 @@ exports.LoginUser = async (req, res) => {
     process.env.JWT_SECRET
   );
   res.header("Authorization", token).json({
-    Message: "user login token",
+    Message: "User logged in",
     token: token,
   });
-
-  /* Redirect to Home Page */
 };
 
 exports.GetAllUsers = async (req, res) => {
@@ -88,8 +86,13 @@ exports.GetAllUsers = async (req, res) => {
 
 exports.GetUser = async (req, res) => {
   try {
-    const id = req.params.id;
-    const user = await User.findById(id);
+    const user = await User.findById(req.userID).populate({
+      path: "posts",
+      populate: {
+        path: "reviewsAtUnit",
+        model:"FeedBack"
+      }
+    });
     res.status(200).json({
       Message: "Fetched the User successfully",
       Data: user,
@@ -101,13 +104,12 @@ exports.GetUser = async (req, res) => {
 
 exports.UpdateUser = async (req, res) => {
   try {
-    const id = req.params.id;
-    const user = await User.findByIdAndUpdate(id, req.body, {
+    const user = await User.findByIdAndUpdate(req.userID, req.body, {
       new: true,
     });
     res.status(200).json({
       Message: "User updated successfully",
-      Data: user,
+      user,
     });
   } catch (error) {
     console.log(error);
@@ -132,13 +134,13 @@ exports.DeleteUser = (req, res) => {
 
 exports.ImageProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.userID);
     const oldProfilePic = user.profilePic;
     user.profilePic = req.file.path;
     await user.save();
     res.status(200).json({
       Message: "Profile image uploaded successfully",
-      Data: user,
+      profilePic,
     });
     await unlinkAsync(oldProfilePic);
   } catch (error) {

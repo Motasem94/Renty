@@ -8,11 +8,11 @@ const upload = require("../../middlewares/upload");
 router.post("/register", UserCtrl.RegisterUser);
 router.post("/login", UserCtrl.LoginUser);
 router.get("/user/all", isAuth, isAdmin, UserCtrl.GetAllUsers);
-router.get("/user/:id", isAuth, UserCtrl.GetUser);
-router.patch("/user/update/:id", isAuth, UserCtrl.UpdateUser);
+router.get("/user", isAuth, UserCtrl.GetUser);
+router.patch("/user/update", isAuth, UserCtrl.UpdateUser);
 router.delete("/user/delete/:id", isAuth, isAdmin, UserCtrl.DeleteUser);
 router.patch(
-  "/user/image-profile/:id",
+  "/user/image-profile",
   isAuth,
   upload.image.single("userImg"),
   UserCtrl.ImageProfile
