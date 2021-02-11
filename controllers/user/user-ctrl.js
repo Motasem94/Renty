@@ -86,13 +86,22 @@ exports.GetAllUsers = async (req, res) => {
 
 exports.GetUser = async (req, res) => {
   try {
-    const user = await User.findById(req.userID).populate({
-      path: "posts",
-      populate: {
-        path: "reviewsAtUnit",
-        model: "FeedBack",
-      },
-    });
+    const user = await User.findById(req.userID)
+      .populate({
+        path: "posts",
+        populate: {
+          path: "reviewsAtUnit",
+          model: "FeedBack",
+        },
+      })
+      .populate({
+        path: "bookings",
+        select: "checkIn checkOut",
+        populate: {
+          path: "bookedPost",
+          select: "titleUnit",
+        },
+      });
     res.status(200).json({
       Message: "Fetched the User successfully",
       Data: user,

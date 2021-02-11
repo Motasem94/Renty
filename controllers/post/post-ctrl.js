@@ -67,7 +67,7 @@ exports.GetPost = async (req, res) => {
   try {
     const id = req.params.id;
     const post = await Post.findById(id)
-      .populate("userID", "firstName profilePic")
+      .populate("userID", "firstName lastName profilePic about phoneNumber")
       .populate({
         path: "reviewsAtUnit",
         select: "rate review",
