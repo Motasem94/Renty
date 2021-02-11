@@ -28,7 +28,7 @@ get >> http://localhost:4000/post/all // token & admin
 patch >> http://localhost:4000/post/pendeing-action/:id // token & admin
 =====================================================
 
-/* routes of Post */
+/* routes of Booking */
 
 /* All require token */
 
@@ -41,7 +41,7 @@ get >> http://localhost:4000//book/all  // only admin
 
 =====================================================
 
-/* routes of Post */
+/* routes of FeedBack */
 
 /* All require token */
 
