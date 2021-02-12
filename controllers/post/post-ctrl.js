@@ -118,15 +118,15 @@ exports.DeletePost = (req, res) => {
 
 exports.UploadImage = async (req, res) => {
   try {
-    if(!req.files){
+    if (!req.files) {
       return res.status(200).json({
-        Message: "No Image uploaded"
-      })
+        Message: "No Image uploaded",
+      });
     }
     if (req.files.length === 0) {
       return res.status(200).json({
-        Message: "No Image uploaded"
-      })
+        Message: "No Image uploaded",
+      });
     }
     const post = await Post.findById(req.params.id);
     const oldImages = arrPathsOld(
@@ -187,11 +187,11 @@ function arrPaths(ArrObjFiles, len) {
   }
   return arr;
 }
-function arrPathsOld(ArrObjFiles,len) {
+function arrPathsOld(ArrObjFiles, len) {
   const arr = [];
   for (let i = 0; i < len; i++) {
     let str = new String(ArrObjFiles[i]);
-    str = str.replace(/\\/g,'\\');;
+    str = str.replace(/\\/g, "\\");
     arr.push(str);
   }
   return arr;

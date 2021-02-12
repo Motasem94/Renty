@@ -28,7 +28,7 @@ exports.CreateFeedBack = async (req, res) => {
       postID: post._id,
     });
     feedBack.save().then((response) => {
-      res.json({
+      res.status(200).json({
         Message: "Thanks for your review!",
         Data: response,
       });
@@ -45,17 +45,21 @@ exports.CreateFeedBack = async (req, res) => {
   }
 };
 
-// exports.GetFeedBack = async (req, res) => {
-//   try {
-//     const post = await Post.findById(req.params.postid);
-
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
 exports.DeleteFeedBack = async (req, res) => {
   try {
+    const id = req.params.feedid;
+    FeedBack.findByIdAndDelete(id).then((deletedFeedBack) => {
+      if (!deletedFeedBack) {
+        return res.json({
+          Message: "Not Found!",
+          Date: null,
+        });
+      }
+      res.json({
+        Message: "FeedBack Deleted!",
+        Data: deletedFeedBack,
+      });
+    });
   } catch (error) {
     console.log(error);
   }
