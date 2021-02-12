@@ -52,7 +52,7 @@ exports.GetAllPosts = async (req, res) => {
     const posts = await pendingPosts.concat(rejectPosts, approvePosts);
     res.status(200).json({
       Message: "Posts fetched successfully",
-      NumberOfAllPosts: allPosts.length,
+      NumberOfAllPosts: posts.length,
       NumberOf_PendingPosts: pendingPosts.length,
       NumberOf_RejectPosts: rejectPosts.length,
       NumberOf_ApprovePosts: approvePosts.length,
