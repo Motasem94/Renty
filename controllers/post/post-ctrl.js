@@ -44,19 +44,19 @@ exports.CreatePost = async (req, res) => {
 
 exports.GetAllPosts = async (req, res) => {
   try {
+    const currentPage = req.query.page || 1;
+    const perPage = 8;
     const pendingPosts = await Post.find({ statusUnit: "pending" });
-    const approvePosts = await Post.find({ statusUnit: "approve" });
     const rejectPosts = await Post.find({ statusUnit: "reject" });
+    const approvePosts = await Post.find({ statusUnit: "approve" });
+    const allPosts = await pendingPosts.concat(rejectPosts,approvePosts);
     res.status(200).json({
       Message: "Posts fetched successfully",
-      NumberOfAllPosts:
-        pendingPosts.length + approvePosts.length + rejectPosts.length,
+      NumberOfAllPosts:allPosts.length,
       NumberOf_PendingPosts: pendingPosts.length,
-      NumberOf_ApprovePosts: approvePosts.length,
       NumberOf_RejectPosts: rejectPosts.length,
-      pendingPosts,
-      approvePosts,
-      rejectPosts,
+      NumberOf_ApprovePosts: approvePosts.length,
+      allPosts,
     });
   } catch (error) {
     console.log(error);
