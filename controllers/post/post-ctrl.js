@@ -44,19 +44,19 @@ exports.CreatePost = async (req, res) => {
 
 exports.GetAllPosts = async (req, res) => {
   try {
-    const currentPage = req.query.page || 1;
-    const perPage = 8;
+    // const currentPage = req.query.page || 1;
+    // const perPage = 8;
     const pendingPosts = await Post.find({ statusUnit: "pending" });
     const rejectPosts = await Post.find({ statusUnit: "reject" });
     const approvePosts = await Post.find({ statusUnit: "approve" });
-    const allPosts = await pendingPosts.concat(rejectPosts,approvePosts);
+    const posts = await pendingPosts.concat(rejectPosts, approvePosts);
     res.status(200).json({
       Message: "Posts fetched successfully",
-      NumberOfAllPosts:allPosts.length,
+      NumberOfAllPosts: allPosts.length,
       NumberOf_PendingPosts: pendingPosts.length,
       NumberOf_RejectPosts: rejectPosts.length,
       NumberOf_ApprovePosts: approvePosts.length,
-      allPosts,
+      posts,
     });
   } catch (error) {
     console.log(error);
@@ -166,14 +166,28 @@ exports.UpdatePostStatus = async (req, res) => {
 
 exports.GetAllApprovedPosts = async (req, res) => {
   try {
-    const posts = await Post.find({ statusUnit: "approve" }).populate(
+    // const page = parseInt(req.query.page);
+    // const limit = parseInt(req.query.limit);
+    // const startIndex = (page-1)*limit;
+    // const endIndex = page*limit;
+    // const paginatedPosts = {}
+    // paginatedPosts.next ={
+    //   page: page+1,
+    //   limit: limit
+    // }
+    // paginatedPosts.previous ={
+    //   page: page-1,
+    //   limit: limit
+    // }
+    const postsDB = await Post.find({ statusUnit: "approve" }).populate(
       "userID",
       "firstName profilePic"
     );
+    // paginatedPosts.posts = postsDB.slice(startIndex,endIndex);
     res.status(200).json({
       Message: "Posts fetched successfully",
-      NumberOfPosts_Approved: posts.length,
-      posts,
+      NumberOfPosts_Approved: postsDB.length,
+      postsDB,
     });
   } catch (error) {
     console.log(error);
