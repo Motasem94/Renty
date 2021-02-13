@@ -3,6 +3,7 @@ const ValidatePost = require("./post-validation");
 const User = require("../../models/user-model");
 const fs = require("fs");
 const { promisify } = require("util");
+const { response } = require("express");
 const unlinkAsync = promisify(fs.unlink);
 
 exports.CreatePost = async (req, res) => {
@@ -44,7 +45,6 @@ exports.CreatePost = async (req, res) => {
 
 exports.GetAllPosts = async (req, res) => {
   try {
-
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
     const startIndex = (page - 1) * limit;
@@ -137,34 +137,56 @@ exports.DeletePost = (req, res) => {
 
 exports.UploadImage = async (req, res) => {
   try {
-    if (!req.files) {
-      return res.status(200).json({
-        Message: "No Image uploaded",
-      });
-    }
-    if (req.files.length === 0) {
+    console.log(req.file);
+    if (!req.file) {
       return res.status(200).json({
         Message: "No Image uploaded",
       });
     }
     const post = await Post.findById(req.params.id);
-    const oldImages = arrPathsOld(
-      post.imagesRentalUnit,
-      post.imagesRentalUnit.length
-    );
-    post.imagesRentalUnit = arrPaths(req.files, req.files.length);
+    const oldimagesRental = post.imagesRentalUnit;
+    post.imagesRentalUnit = req.file.path;
     await post.save();
     res.status(200).json({
       Message: "Images uploaded successfully",
       Data: post.imagesRentalUnit,
     });
-    for (let i = 0; i < oldImages.length; i++) {
-      await unlinkAsync(oldImages[i]);
-    }
+    await unlinkAsync(oldimagesRental);
   } catch (error) {
     console.log(error);
   }
 };
+
+// exports.UploadImage = async (req, res) => {
+//   try {
+//     if (!req.files) {
+//       return res.status(200).json({
+//         Message: "No Image uploaded",
+//       });
+//     }
+//     if (req.files.length === 0) {
+//       return res.status(200).json({
+//         Message: "No Image uploaded",
+//       });
+//     }
+//     const post = await Post.findById(req.params.id);
+//     const oldImages = arrPathsOld(
+//       post.imagesRentalUnit,
+//       post.imagesRentalUnit.length
+//     );
+//     post.imagesRentalUnit = arrPaths(req.files, req.files.length);
+//     await post.save();
+//     res.status(200).json({
+//       Message: "Images uploaded successfully",
+//       Data: post.imagesRentalUnit,
+//     });
+//     for (let i = 0; i < oldImages.length; i++) {
+//       await unlinkAsync(oldImages[i]);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 exports.UpdatePostStatus = async (req, res) => {
   try {
@@ -218,6 +240,21 @@ exports.GetAllApprovedPosts = async (req, res) => {
   }
 };
 
+exports.SearchPosts = async (req, res) => {
+  const search = req.query.search;
+  const posts = await Post.find({ $or });
+  if (!posts) {
+    return res.status(200).json({
+      Message: "Not found",
+    });
+  }
+  res.status(200).json({
+    Message: "Found posts",
+    NumberOfMatches: posts.length,
+    posts,
+  });
+};
+
 function arrPaths(ArrObjFiles, len) {
   const arr = [];
   for (let i = 0; i < len; i++) {
@@ -225,6 +262,7 @@ function arrPaths(ArrObjFiles, len) {
   }
   return arr;
 }
+
 function arrPathsOld(ArrObjFiles, len) {
   const arr = [];
   for (let i = 0; i < len; i++) {

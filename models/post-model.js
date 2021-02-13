@@ -19,7 +19,7 @@ const PostSchema = mongoose.Schema(
     cumulativeRatingUnit: { type: Number },
     descriptionUnit: { type: String },
     reviewsAtUnit: [{ type: mongoose.Schema.Types.ObjectId, ref: "FeedBack" }],
-    imagesRentalUnit: [String],
+    imagesRentalUnit: { type: String },
     rentalPriceUnit: { type: Number },
     bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Booking" }],
   },
