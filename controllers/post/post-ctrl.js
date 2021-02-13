@@ -44,19 +44,38 @@ exports.CreatePost = async (req, res) => {
 
 exports.GetAllPosts = async (req, res) => {
   try {
-    // const currentPage = req.query.page || 1;
-    // const perPage = 8;
+
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedPosts = {};
+
     const pendingPosts = await Post.find({ statusUnit: "pending" });
     const rejectPosts = await Post.find({ statusUnit: "reject" });
     const approvePosts = await Post.find({ statusUnit: "approve" });
-    const posts = await pendingPosts.concat(rejectPosts, approvePosts);
+    const postsDB = await pendingPosts.concat(rejectPosts, approvePosts);
+
+    if (endIndex < postsDB.length) {
+      paginatedPosts.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+    if (startIndex > 0) {
+      paginatedPosts.previous = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+    paginatedPosts.posts = postsDB.slice(startIndex, endIndex);
     res.status(200).json({
       Message: "Posts fetched successfully",
-      NumberOfAllPosts: posts.length,
+      NumberOfAllPosts: postsDB.length,
       NumberOf_PendingPosts: pendingPosts.length,
       NumberOf_RejectPosts: rejectPosts.length,
       NumberOf_ApprovePosts: approvePosts.length,
-      posts,
+      paginatedPosts,
     });
   } catch (error) {
     console.log(error);
@@ -157,7 +176,7 @@ exports.UpdatePostStatus = async (req, res) => {
     );
     res.status(200).json({
       Message: "Post status changed!",
-      statusUnit,
+      data: post.statusUnit,
     });
   } catch (error) {
     console.log(error);
@@ -166,28 +185,33 @@ exports.UpdatePostStatus = async (req, res) => {
 
 exports.GetAllApprovedPosts = async (req, res) => {
   try {
-    // const page = parseInt(req.query.page);
-    // const limit = parseInt(req.query.limit);
-    // const startIndex = (page-1)*limit;
-    // const endIndex = page*limit;
-    // const paginatedPosts = {}
-    // paginatedPosts.next ={
-    //   page: page+1,
-    //   limit: limit
-    // }
-    // paginatedPosts.previous ={
-    //   page: page-1,
-    //   limit: limit
-    // }
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedPosts = {};
+
     const postsDB = await Post.find({ statusUnit: "approve" }).populate(
       "userID",
       "firstName profilePic"
     );
-    // paginatedPosts.posts = postsDB.slice(startIndex,endIndex);
+    if (endIndex < postsDB.length) {
+      paginatedPosts.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+    if (startIndex > 0) {
+      paginatedPosts.previous = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+    paginatedPosts.posts = postsDB.slice(startIndex, endIndex);
     res.status(200).json({
       Message: "Posts fetched successfully",
       NumberOfPosts_Approved: postsDB.length,
-      postsDB,
+      paginatedPosts,
     });
   } catch (error) {
     console.log(error);
