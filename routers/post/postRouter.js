@@ -15,7 +15,7 @@ router.patch(
   "/post/images-upload/:id",
   isAuth,
   isSameUser,
-  upload.image.array("imagesRentalUnit", 5),
+  upload.image.single("imagesRentalUnit"),
   PostCtrl.UploadImage
 );
 router.patch(

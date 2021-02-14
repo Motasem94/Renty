@@ -135,58 +135,63 @@ exports.DeletePost = (req, res) => {
   });
 };
 
-// exports.UploadImage = async (req, res) => {
-//   try {
-//     console.log(req.file);
-//     if (!req.file) {
-//       return res.status(200).json({
-//         Message: "No Image uploaded",
-//       });
-//     }
-//     const post = await Post.findById(req.params.id);
-//     const oldimagesRental = post.imagesRentalUnit;
-//     post.imagesRentalUnit = req.file.path;
-//     await post.save();
-//     res.status(200).json({
-//       Message: "Images uploaded successfully",
-//       Data: post.imagesRentalUnit,
-//     });
-//     await unlinkAsync(oldimagesRental);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
 exports.UploadImage = async (req, res) => {
   try {
-    if (!req.files) {
-      return res.status(200).json({
-        Message: "No Image uploaded",
-      });
-    }
-    if (req.files.length === 0) {
+    // console.log(req.file);
+    if (!req.file) {
       return res.status(200).json({
         Message: "No Image uploaded",
       });
     }
     const post = await Post.findById(req.params.id);
-    const oldImages = arrPathsOld(
-      post.imagesRentalUnit,
-      post.imagesRentalUnit.length
-    );
-    post.imagesRentalUnit = arrPaths(req.files, req.files.length);
+    // const oldimagesRental = post.imagesRentalUnit;
+    if(post.imagesRentalUnit.length>3){
+      return res.status(200).json({
+        Message: "images limit reached",
+      });
+    }
+    post.imagesRentalUnit.push(req.file.path);
     await post.save();
     res.status(200).json({
       Message: "Images uploaded successfully",
       Data: post.imagesRentalUnit,
     });
-    for (let i = 0; i < oldImages.length; i++) {
-      await unlinkAsync(oldImages[i]);
-    }
+    // await unlinkAsync(oldimagesRental);
   } catch (error) {
     console.log(error);
   }
 };
+
+// exports.UploadImage = async (req, res) => {
+//   try {
+//     if (!req.files) {
+//       return res.status(200).json({
+//         Message: "No Image uploaded",
+//       });
+//     }
+//     if (req.files.length === 0) {
+//       return res.status(200).json({
+//         Message: "No Image uploaded",
+//       });
+//     }
+//     const post = await Post.findById(req.params.id);
+//     const oldImages = arrPathsOld(
+//       post.imagesRentalUnit,
+//       post.imagesRentalUnit.length
+//     );
+//     post.imagesRentalUnit = arrPaths(req.files, req.files.length);
+//     await post.save();
+//     res.status(200).json({
+//       Message: "Images uploaded successfully",
+//       Data: post.imagesRentalUnit,
+//     });
+//     for (let i = 0; i < oldImages.length; i++) {
+//       await unlinkAsync(oldImages[i]);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 exports.UpdatePostStatus = async (req, res) => {
   try {
