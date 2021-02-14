@@ -21,7 +21,7 @@ get >> http://localhost:4000/post/:id //nothing is needed
 post >> http://localhost:4000/post/create // token
 patch >> http://localhost:4000/post/update/:id // token
 delete >> http://localhost:4000/post/delete/:id // token
-patch >> http://localhost:4000/post/image-upload/:id // token
+patch >> http://localhost:4000/post/images-upload/:id // token
 
 
 get >> http://localhost:4000/post/all?page=Number&limit=perPage // token & admin

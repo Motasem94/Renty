@@ -10,7 +10,7 @@ exports.CreateFeedBack = async (req, res) => {
     const isFound = user.bookings.some((i) => post.bookings.indexOf(i) >= 0);
     if (!isFound) {
       return res.status(400).json({
-        Message: "Can't rate it if you never booked it",
+        error: "Can't rate it if you never booked it",
       });
     }
     const isReviewed = user.reviewsByUser.some(

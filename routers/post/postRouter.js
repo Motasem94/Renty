@@ -15,7 +15,7 @@ router.patch(
   "/post/images-upload/:id",
   isAuth,
   isSameUser,
-  upload.image.single("imagesRentalUnit"),
+  upload.image.array("imagesRentalUnit", 5),
   PostCtrl.UploadImage
 );
 router.patch(
@@ -26,6 +26,5 @@ router.patch(
 );
 router.get("/post/all/approved", PostCtrl.GetAllApprovedPosts);
 router.get("/post/search", PostCtrl.SearchPosts);
-
 
 module.exports = router;

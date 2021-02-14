@@ -96,7 +96,7 @@ exports.GetUser = async (req, res) => {
       })
       .populate({
         path: "bookings",
-        select: "checkIn checkOut",
+        select: "checkIn checkOut amount",
         populate: {
           path: "bookedPost",
           select: "titleUnit",
