@@ -5,7 +5,7 @@ const User = require("../../models/user-model");
 exports.CreateFeedBack = async (req, res) => {
   try {
     const user = await User.findById(req.userID);
-    const post = await Post.findById(req.body.feedbackPostID);
+    const post = await Post.findById(req.body.postID);
     // Check if an array contains any element of another array in JavaScript
     const isFound = user.bookings.some((i) => post.bookings.indexOf(i) >= 0);
     if (!isFound) {
