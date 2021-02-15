@@ -1,11 +1,21 @@
 const Booking = require("../../models/booking-model");
 const User = require("../../models/user-model");
 const Post = require("../../models/post-model");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "renty.manager@gmail.com",
+    pass: ",c$c4UL8P'`(jztP",
+  },
+});
 
 exports.CreateBooking = async (req, res) => {
   try {
-    const user = await User.findById(req.userID);
+    const bookingUser = await User.findById(req.userID);
     const post = await Post.findById(req.body.bookedPost);
+    const ownerUser = await User.findById(post.userID);
     const checkin = new Date(req.body.checkIn);
     const checkout = new Date(req.body.checkOut);
     const calculatedAmount =
@@ -35,10 +45,41 @@ exports.CreateBooking = async (req, res) => {
       .catch((err) => {
         console.log(err);
       });
-    user.bookings.push(booking._id);
+    bookingUser.bookings.push(booking._id);
     post.bookings.push(booking._id);
-    await user.save();
+    await bookingUser.save();
     await post.save();
+    const userBooker = {
+      from: "renty.manager@gmail.com",
+      to: bookingUser.email,
+      subject: `Reservation of ${post.titleUnit} confirmation `,
+      text: `${
+        post.titleUnit
+      } will be ready for your staying from\n${checkin.getDate()}/${
+        checkin.getMonth() + 1
+      }/${checkin.getUTCFullYear()} to 
+        ${checkout.getDate()}/${
+        checkout.getMonth() + 1
+      }/${checkout.getUTCFullYear()},
+      We hope you enjoy your time!
+      Renty <3`,
+    };
+    const postOwner = {
+      from: "renty.manager@gmail.com",
+      to: ownerUser.email,
+      subject: `Reservation of your ${post.titleUnit}`,
+      text: `Your ${post.titleUnit}, reserved by ${
+        bookingUser.firstName
+      }\nfrom\n${checkin.getDate()}/${
+        checkin.getMonth() + 1
+      }/${checkin.getUTCFullYear()} to ${checkout.getDate()}/${
+        checkout.getMonth() + 1
+      }/${checkout.getUTCFullYear()},
+      With total amout of ${calculatedAmount}
+      Renty <3 `,
+    };
+    transporter.sendMail(userBooker);
+    transporter.sendMail(postOwner);
   } catch (error) {
     console.log(error);
   }

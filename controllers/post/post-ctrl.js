@@ -1,17 +1,26 @@
 const Post = require("../../models/post-model");
 const ValidatePost = require("./post-validation");
 const User = require("../../models/user-model");
-const fs = require("fs");
-const { promisify } = require("util");
-const { response } = require("express");
-const unlinkAsync = promisify(fs.unlink);
+const nodemailer = require("nodemailer");
+// const fs = require("fs");
+// const { promisify } = require("util");
+// const { response } = require("express");
+// const unlinkAsync = promisify(fs.unlink);
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "renty.manager@gmail.com",
+    pass: ",c$c4UL8P'`(jztP",
+  },
+});
 
 exports.CreatePost = async (req, res) => {
   try {
-    const { error } = ValidatePost.CreatePost(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
-    }
+    // const { error } = ValidatePost.CreatePost(req.body);
+    // if (error) {
+    //   return res.status(400).json({ error: error.details[0].message });
+    // }
     const post = new Post({
       userID: req.userID,
       titleUnit: req.body.titleUnit,
@@ -38,6 +47,15 @@ exports.CreatePost = async (req, res) => {
       });
     user.posts.push(post._id);
     await user.save();
+    const mailOptions = {
+      from: "renty.manager@gmail.com",
+      to: user.email,
+      subject: "Post Assessment",
+      text: "Your post've been created, Its now in the assesment process!",
+    };
+    transporter.sendMail(mailOptions, (err) => {
+      console.log(err);
+    });
   } catch (err) {
     console.log(err);
   }
@@ -45,37 +63,37 @@ exports.CreatePost = async (req, res) => {
 
 exports.GetAllPosts = async (req, res) => {
   try {
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const paginatedPosts = {};
+    // const page = parseInt(req.query.page);
+    // const limit = parseInt(req.query.limit);
+    // const startIndex = (page - 1) * limit;
+    // const endIndex = page * limit;
+    // const paginatedPosts = {};
 
     const pendingPosts = await Post.find({ statusUnit: "pending" });
     const rejectPosts = await Post.find({ statusUnit: "reject" });
     const approvePosts = await Post.find({ statusUnit: "approve" });
-    const postsDB = await pendingPosts.concat(rejectPosts, approvePosts);
+    const posts = await pendingPosts.concat(rejectPosts, approvePosts);
 
-    if (endIndex < postsDB.length) {
-      paginatedPosts.next = {
-        page: page + 1,
-        limit: limit,
-      };
-    }
-    if (startIndex > 0) {
-      paginatedPosts.previous = {
-        page: page - 1,
-        limit: limit,
-      };
-    }
-    paginatedPosts.posts = postsDB.slice(startIndex, endIndex);
+    // if (endIndex < postsDB.length) {
+    //   paginatedPosts.next = {
+    //     page: page + 1,
+    //     limit: limit,
+    //   };
+    // }
+    // if (startIndex > 0) {
+    //   paginatedPosts.previous = {
+    //     page: page - 1,
+    //     limit: limit,
+    //   };
+    // }
+    // paginatedPosts.posts = postsDB.slice(startIndex, endIndex);
     res.status(200).json({
       Message: "Posts fetched successfully",
-      NumberOfAllPosts: postsDB.length,
+      NumberOfAllPosts: posts.length,
       NumberOf_PendingPosts: pendingPosts.length,
       NumberOf_RejectPosts: rejectPosts.length,
       NumberOf_ApprovePosts: approvePosts.length,
-      paginatedPosts,
+      posts,
     });
   } catch (error) {
     console.log(error);
@@ -89,6 +107,7 @@ exports.GetPost = async (req, res) => {
       .populate("userID", "firstName lastName profilePic about phoneNumber")
       .populate({
         path: "reviewsAtUnit",
+        model: "FeedBack",
         select: "rate review",
         populate: {
           path: "userID",
@@ -125,12 +144,10 @@ exports.DeletePost = (req, res) => {
     if (!deletedPost) {
       return res.json({
         Message: "Not Found!",
-        Date: null,
       });
     }
     res.json({
       Message: "Deleted!",
-      Data: deletedPost,
     });
   });
 };
@@ -145,7 +162,7 @@ exports.UploadImage = async (req, res) => {
     }
     const post = await Post.findById(req.params.id);
     // const oldimagesRental = post.imagesRentalUnit;
-    if(post.imagesRentalUnit.length>3){
+    if (post.imagesRentalUnit.length > 3) {
       return res.status(200).json({
         Message: "images limit reached",
       });
@@ -201,10 +218,19 @@ exports.UpdatePostStatus = async (req, res) => {
       { statusUnit: req.body.statusUnit },
       { new: true }
     );
+    const user = await User.findById(post.userID);
     res.status(200).json({
       Message: "Post status changed!",
       data: post.statusUnit,
     });
+    const mailOptions = {
+      from: "renty.manager@gmail.com",
+      to: user.email,
+      subject: "Post Assessment",
+      text:
+        "Your post has been approved, It's now published on the website.\nWe hope you make a great profit of it\nRenty <3 ",
+    };
+    transporter.sendMail(mailOptions);
   } catch (error) {
     console.log(error);
   }
@@ -245,38 +271,20 @@ exports.GetAllApprovedPosts = async (req, res) => {
   }
 };
 
-exports.SearchPosts = async (req, res) => {
-  const search = req.query.search;
-  const posts = await Post.find().or([
-    { titleUnit: search },
-    { descriptionUnit: search },
-  ]);
-  if (!posts) {
-    return res.status(200).json({
-      Message: "Not found",
-    });
-  }
-  res.status(200).json({
-    Message: "Found posts",
-    NumberOfMatches: posts.length,
-    posts,
-  });
-};
+// function arrPaths(ArrObjFiles, len) {
+//   const arr = [];
+//   for (let i = 0; i < len; i++) {
+//     arr.push(ArrObjFiles[i].path);
+//   }
+//   return arr;
+// }
 
-function arrPaths(ArrObjFiles, len) {
-  const arr = [];
-  for (let i = 0; i < len; i++) {
-    arr.push(ArrObjFiles[i].path);
-  }
-  return arr;
-}
-
-function arrPathsOld(ArrObjFiles, len) {
-  const arr = [];
-  for (let i = 0; i < len; i++) {
-    let str = new String(ArrObjFiles[i]);
-    str = str.replace(/\\/g, "\\");
-    arr.push(str);
-  }
-  return arr;
-}
+// function arrPathsOld(ArrObjFiles, len) {
+//   const arr = [];
+//   for (let i = 0; i < len; i++) {
+//     let str = new String(ArrObjFiles[i]);
+//     str = str.replace(/\\/g, "\\");
+//     arr.push(str);
+//   }
+//   return arr;
+// }

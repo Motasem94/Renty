@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path')
 const PostCtrl = require("../../controllers/post/post-ctrl");
 const router = express.Router();
 const isAuth = require("../../middlewares/isAuth");
@@ -25,6 +26,7 @@ router.patch(
   PostCtrl.UpdatePostStatus
 );
 router.get("/post/all/approved", PostCtrl.GetAllApprovedPosts);
-router.get("/post/search", PostCtrl.SearchPosts);
+router.use('/images',express.static(path.join(__dirname,'../../images')));
+
 
 module.exports = router;

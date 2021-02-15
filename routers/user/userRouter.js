@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path')
 const UserCtrl = require("../../controllers/user/user-ctrl");
 const router = express.Router();
 const isAuth = require("../../middlewares/isAuth");
@@ -17,5 +18,6 @@ router.patch(
   upload.image.single("profilePic"),
   UserCtrl.ImageProfile
 );
+router.use('/images',express.static(path.join(__dirname,'../../images')));
 
 module.exports = router;

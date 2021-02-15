@@ -4,6 +4,7 @@ const User = require("../../models/user-model");
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 const { promisify } = require("util");
+const { populate } = require("../../models/user-model");
 const unlinkAsync = promisify(fs.unlink);
 
 exports.RegisterUser = async (req, res) => {
@@ -92,6 +93,21 @@ exports.GetUser = async (req, res) => {
         populate: {
           path: "reviewsAtUnit",
           model: "FeedBack",
+        },
+        populate: {
+          path: "bookings",
+          model: "Booking",
+          select: "checkIn checkOut amount adults",
+          populate: {
+            path: "bookedPost",
+            model: "Post",
+            select: "titleUnit",
+          },
+          populate: {
+            path: "bookingUser",
+            model: "User",
+            select: "firstName lastName email phoneNumber profilePic",
+          },
         },
       })
       .populate({
