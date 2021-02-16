@@ -4,7 +4,6 @@ const User = require("../../models/user-model");
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 const { promisify } = require("util");
-const { populate } = require("../../models/user-model");
 const unlinkAsync = promisify(fs.unlink);
 
 exports.RegisterUser = async (req, res) => {

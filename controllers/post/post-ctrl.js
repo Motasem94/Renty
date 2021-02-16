@@ -238,37 +238,49 @@ exports.UpdatePostStatus = async (req, res) => {
 
 exports.GetAllApprovedPosts = async (req, res) => {
   try {
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const paginatedPosts = {};
+    // const page = parseInt(req.query.page);
+    // const limit = parseInt(req.query.limit);
+    // const startIndex = (page - 1) * limit;
+    // const endIndex = page * limit;
+    // const paginatedPosts = {};
 
     const postsDB = await Post.find({ statusUnit: "approve" }).populate(
       "userID",
       "firstName profilePic"
     );
-    if (endIndex < postsDB.length) {
-      paginatedPosts.next = {
-        page: page + 1,
-        limit: limit,
-      };
-    }
-    if (startIndex > 0) {
-      paginatedPosts.previous = {
-        page: page - 1,
-        limit: limit,
-      };
-    }
-    paginatedPosts.posts = postsDB.slice(startIndex, endIndex);
+    // if (endIndex < postsDB.length) {
+    //   paginatedPosts.next = {
+    //     page: page + 1,
+    //     limit: limit,
+    //   };
+    // }
+    // if (startIndex > 0) {
+    //   paginatedPosts.previous = {
+    //     page: page - 1,
+    //     limit: limit,
+    //   };
+    // }
+    // paginatedPosts.posts = postsDB.slice(startIndex, endIndex);
     res.status(200).json({
       Message: "Posts fetched successfully",
       NumberOfPosts_Approved: postsDB.length,
-      paginatedPosts,
+      postsDB,
     });
   } catch (error) {
     console.log(error);
   }
+};
+
+exports.SearchByLocation = async (req, res) => {
+  const foundPosts = await Post.find({
+    statusUnit: "approve",
+    locationUnit: req.body.location,
+  }).populate("userID", "firstName profilePic");
+  res.status(200).json({
+    Message: "Posts fetched successfully",
+    NumberOfPosts_match: foundPosts.length,
+    foundPosts,
+  });
 };
 
 // function arrPaths(ArrObjFiles, len) {
