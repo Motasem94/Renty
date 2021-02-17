@@ -26,7 +26,7 @@ router.patch(
   PostCtrl.UpdatePostStatus
 );
 router.get("/post/all/approved", PostCtrl.GetAllApprovedPosts);
-router.get("/post/all/search", PostCtrl.SearchByLocation);
+router.post("/post/all/search", PostCtrl.SearchByLocation);
 router.use('/images',express.static(path.join(__dirname,'../../images')));
 
 
